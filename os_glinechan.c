@@ -2,6 +2,8 @@
  * Copyright (c) 2005-2007 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
+ * Modifications by siniStar@IRC4Fun for the IRC4Fun network.
+ *
  * AutoGline channels.
  *
  */
