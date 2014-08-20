@@ -164,6 +164,12 @@ encrypted and you want to set SOPER passwords.
 
 Generates a random password.
 
+#### ns_goodmail.c
+
+Maintains a whitelist of email domains that are allowed to
+register NickServ nicks.  This allows you to say only
+\*@example.com email address can register nicks.
+
 #### ns_guestnoreg.c
 
 Disallows the registration of nicks beginning with a string
@@ -210,7 +216,8 @@ source code for details.
 #### os_defcon.c
 
 Allows you to use DEFCON-based security on your network.  This may be
-useful to people migrating from Anope.
+useful to people migrating from Anope. **Note:** This module taints
+Atheme. You need to enable `allow_taint` in the config to use it.
 
 #### os_helpme.c
 
