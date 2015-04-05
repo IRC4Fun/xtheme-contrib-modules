@@ -579,7 +579,7 @@ static void trace_kill_exec(user_t *u, trace_action_t *act)
 		return;
 	if (u->myuser && is_soper(u->myuser))
 		return;
-	if ((svs = service_find("operserv")) != NULL)
+	if ((svs = service_find("operserv")) == NULL)
 		return;
 
 	act->matched = true;
@@ -646,7 +646,7 @@ static trace_action_t *trace_akill_prepare(sourceinfo_t *si, char **args)
 			return NULL;
 
 		duration = (atol(s) * 60);
-		while (isdigit(*s))
+		while (isdigit((unsigned char)*s))
 		s++;
 		if (*s == 'h' || *s == 'H')
 			duration *= 60;
