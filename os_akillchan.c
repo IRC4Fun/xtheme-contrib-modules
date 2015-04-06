@@ -72,7 +72,7 @@ static void akillchan_check_join(hook_channel_joinpart_t *hdata)
 			notice(svs->me->nick, cu->user->nick,
 					"Warning: %s AKILLs normal users",
 					cu->chan->name);
-		else if (is_autoakill_exempt(cu->user))
+		else if (is_autokline_exempt(cu->user))
 		{
 			char buf[BUFSIZE];
 			snprintf(buf, sizeof(buf), "Not AKILLing *@%s due to akillchan %s (user %s!%s@%s is exempt)",
