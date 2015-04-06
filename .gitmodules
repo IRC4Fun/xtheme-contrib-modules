@@ -1,0 +1,3 @@
+[submodule "adminserv"]
+	path = adminserv
+	url = https://github.com/IRC4Fun/adminserv.git
