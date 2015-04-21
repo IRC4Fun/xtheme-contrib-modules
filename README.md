@@ -1,4 +1,4 @@
-### Community-supported Atheme Modules
+### Community-supported Xtheme Modules
 
 This directory contains modules that are not included in the main modules
 folders for one reason or another. Either their code is a bit ugly, their
@@ -26,6 +26,13 @@ a pull request on GitHub.
 
 ### Incomplete list of modules
 
+#### adminserv
+
+A service for Xtheme offering "psuedo-oper" services.  Introduces 
+user, channel and network management commands to non-opers with 
+corresponding privs.  Also provides WHOIS and WHOWAS commands.
+(WHOWAS currently only compatible with Charybdis ircd at this time.)
+
 #### cs_babbler.c
 
 Repeats what others users in a channel say back to a specific
@@ -52,14 +59,14 @@ Responds to users that ping ChanServ with "Pong!".
 
 #### cs_regmode.c
 
-Sets the stupid, pointless DALNet-style +/-r mode when a channel
+Sets the pointless DALNet-style +/-r mode when a channel
 is registered or dropped. NOT RECOMMENDED TO USE.
 
 #### cs_regnotice.c
 
 Sends a user a notice with some information specified in a
 regnotice {} block inside the chanserv {} block of your
-atheme.conf when the user registers a channel.
+xtheme.conf when the user registers a channel.
 
 #### cs_updown.c
 
@@ -90,7 +97,7 @@ NOT RECOMMENDED TO USE.
 Assigns a $account.hidehostsuffix vhost to all users upon
 account registration. $account will be replaced by the users'
 accountname and hidehostsuffix is that config option from the
-serverinfo {} block of your atheme.conf.
+serverinfo {} block of your xtheme.conf.
 
 #### graphtastical.c
 
@@ -133,7 +140,7 @@ code for what to edit.
 
 #### ns_ajoin.c
 
-Allows users to set a AJOIN/autojoin list of channels that Atheme
+Allows users to set a AJOIN/autojoin list of channels that Xtheme
 will automatically join them to upon identify. Only works on
 ShadowIRCd, InspIRCd and UnrealIRCd.
 
@@ -174,7 +181,7 @@ register NickServ nicks.  This allows you to say only
 
 Disallows the registration of nicks beginning with a string
 specified in the guestnicks {} block inside the nickserv {}
-block of your atheme.conf.
+block of your xtheme.conf.
 
 #### ns_listlogins.c
 
@@ -194,30 +201,34 @@ Same as ns_mxcheck.c, but asynchronous.
 
 Sends a user a notice with some information specified in a
 regnotice {} block inside the nickserv {} block of your
-atheme.conf when the user registers an account.
+xtheme.conf when the user registers an account.
 
 #### ns_waitreg.c
 
 Requires a user to have been connected for waitreg_time (in
-the nickserv {} block of your atheme.conf) seconds before
+the nickserv {} block of your xtheme.conf) seconds before
 they are allowed to register their nick.
 
 #### on_db_save.c
 
-Allows you to specify a command that is run every time the Atheme
+Allows you to specify a command that is run every time the Xtheme
 database is saved.
+
+#### os_akillchan.c
+
+AKILLs all users who join a AKILLCHAN.
 
 #### os_akillnicklist.c
 
 AKILLs users matched in a nicklist specified in your
-atheme.conf. See the comment at the top of the module's
+xtheme.conf. See the comment at the top of the module's
 source code for details.
 
 #### os_defcon.c
 
 Allows you to use DEFCON-based security on your network.  This may be
 useful to people migrating from Anope. **Note:** This module taints
-Atheme. You need to enable `allow_taint` in the config to use it.
+Xtheme. You need to enable `allow_taint` in the config to use it.
 
 #### os_helpme.c
 
@@ -234,10 +245,6 @@ be sent to the logchan (with the info loglevel).
 #### os_kill.c
 
 Allows opers to KILL users via services.
-
-#### os_klinechan.c
-
-KLINEs all users who join a KLINECHAN.
 
 #### os_pingspam.c
 
