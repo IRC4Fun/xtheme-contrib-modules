@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2010 William Pitcock, et al.
+ * Copyright (c) 2015 Xtheme Development Group (Xtheme.org)
  * The rights to this code are as documented under doc/LICENSE.
  *
  * Automatically AKILL a list of clients, given their operating parameters.
@@ -137,7 +138,7 @@ aknl_nickhook(hook_user_nick_t *data)
 		return;
 
 	if (! (u->flags & UF_KLINESENT)) {
-		slog(LG_INFO, "AKNL: k-lining \2%s\2!%s@%s [%s] due to appearing to be a possible spambot", u->nick, u->user, u->host, u->gecos);
+		slog(LG_INFO, "AKNL: akilling \2%s\2!%s@%s [%s] due to appearing to be a possible spambot", u->nick, u->user, u->host, u->gecos);
 		kline_sts("*", "*", u->host, 86400, "Possible spambot");
 		u->flags |= UF_KLINESENT;
 	}

@@ -32,7 +32,7 @@
 *
 */
 
-/* To configure/use, add a block to the general{} section of your atheme.conf
+/* To configure/use, add a block to the general{} section of your xtheme.conf
  * like this:
  *
  * blacklists {
@@ -502,7 +502,7 @@ static void dnsbl_hit(user_t *u, struct Blacklist *blptr)
 	else if (!strcasecmp("KLINE", action))
 	{
 		if (! (u->flags & UF_KLINESENT)) {
-			slog(LG_INFO, "DNSBL: k-lining \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
+			slog(LG_INFO, "DNSBL: akilling \2%s\2!%s@%s [%s] who is listed in DNS Blacklist %s.", u->nick, u->user, u->host, u->gecos, blptr->host);
 			/* abort_blacklist_queries(u); */
 			notice(svs->nick, u->nick, "Your IP address %s is listed in DNS Blacklist %s", u->ip, blptr->host);
 			kline_sts("*", "*", u->host, 86400, "Banned (DNS Blacklist)");

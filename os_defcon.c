@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2010 JD Horelick <jdhore1@gmail.com>
+ * Copyright (c) 2015 Xtheme Development Group
  * Rights to this code are as defined in doc/LICENSE.
  *
  * DEFCON implementation.
@@ -101,7 +102,7 @@ static void defcon_useradd(hook_user_nick_t *data)
 
 	if (level == 1)
 	{
-		slog(LG_INFO, "DEFCON:KLINE: %s!%s@%s", u->nick, u->user, u->host);
+		slog(LG_INFO, "DEFCON:AKILL: %s!%s@%s", u->nick, u->user, u->host);
 		if (! (u->flags & UF_KLINESENT)) {
 			kline_sts("*", u->user, u->host, 900, "This network is currently not accepting connections, please try again later.");
 			u->flags |= UF_KLINESENT;

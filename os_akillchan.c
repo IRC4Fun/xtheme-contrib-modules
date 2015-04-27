@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2005-2007 Atheme Development Group
- * Copyright (c) 2014-2015 IRC4Fun Development Group
+ * Copyright (c) 2014-2015 Xtheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * AutoAKILL channels. (formerly os_klinechan but using 
