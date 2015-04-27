@@ -65,6 +65,10 @@ static void akillchan_check_join(hook_channel_joinpart_t *hdata)
 	if (!(mc = mychan_from(cu->chan)))
 		return;
 
+	/* If they've already been sent a kline, do nothing */
+	if (cu->user->flags & UF_KLINESENT)
+		return;
+
 	if (metadata_find(mc, "private:klinechan:closer"))
 	{
 		khost = cu->user->ip ? cu->user->ip : cu->user->host;
@@ -88,7 +92,9 @@ static void akillchan_check_join(hook_channel_joinpart_t *hdata)
 					khost, cu->user->nick,
 					cu->user->user, cu->user->host,
 					cu->chan->name);
+
 			kline_sts("*", "*", khost, 86400, reason);
+			cu->user->flags |= UF_KLINESENT;
 		}
 	}
 }
