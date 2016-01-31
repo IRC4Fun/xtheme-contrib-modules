@@ -8,6 +8,8 @@
  * as well to maintain compatibility with previously set
  * os_klinechan channels.)
  *
+ * Default AKILL time is 24 hours (86400 seconds)
+ *
  */
 
 #include "atheme-compat.h"
@@ -16,7 +18,7 @@ DECLARE_MODULE_V1
 (
 	"contrib/os_akillchan", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Jilles Tjoelker <http://www.stack.nl/~jilles/irc/>"
+	"Xtheme Group <www.Xtheme.org>"
 );
 
 static void os_cmd_akillchan(sourceinfo_t *si, int parc, char *parv[]);
@@ -54,6 +56,7 @@ static void akillchan_check_join(hook_channel_joinpart_t *hdata)
 	service_t *svs;
 	char reason[256];
 	const char *khost;
+	kline_t *k;
 
 	svs = service_find("operserv");
 	if (svs == NULL)
@@ -93,7 +96,7 @@ static void akillchan_check_join(hook_channel_joinpart_t *hdata)
 					cu->user->user, cu->user->host,
 					cu->chan->name);
 
-			kline_sts("*", "*", khost, 86400, reason);
+			k = kline_add(cu->user->user, khost, reason, 86400, "*");
 			cu->user->flags |= UF_KLINESENT;
 		}
 	}
