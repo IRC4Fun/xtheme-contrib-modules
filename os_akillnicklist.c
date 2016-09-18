@@ -106,6 +106,9 @@ aknl_nickhook(hook_user_nick_t *data)
 	bool doit = false;
 	const char *username;
 	kline_t *k;
+	
+	service_t *svs;
+	svs = service_find("operserv");
 
 	return_if_fail(data != NULL);
 
@@ -166,6 +169,9 @@ _modinit(module_t *m)
 	hook_add_user_add(aknl_nickhook);
 	hook_add_event("user_nickchange");
 	hook_add_user_nickchange(aknl_nickhook);
+	
+	service_t *svs;
+	svs = service_find("operserv");
 }
 
 void
@@ -179,4 +185,7 @@ _moddeinit(module_unload_intent_t intent)
 	del_conf_item("USER", &conft);
 	del_conf_item("REAL", &conft);
 	del_top_conf("NICKLISTS");
+	
+	service_t *svs;
+	svs = service_find("operserv");
 }

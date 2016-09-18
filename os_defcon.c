@@ -94,6 +94,9 @@ static void defcon_useradd(hook_user_nick_t *data)
 {
 	user_t *u = data->u;
 	kline_t *k;
+	
+	service_t *svs;
+	svs = service_find("operserv");
 
 	if (!u)
 		return;
