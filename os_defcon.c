@@ -105,7 +105,7 @@ static void defcon_useradd(hook_user_nick_t *data)
 	{
 		slog(LG_INFO, "DEFCON:AKILL: %s!%s@%s", u->nick, u->user, u->host);
 		if (! (u->flags & UF_KLINESENT)) {
-			k = kline_add(u->user, u->host, "This network is currently not accepting connections, please try again later.", 900, "*");
+			k = kline_add(u->user, u->host, "This network is currently not accepting connections, please try again later.", 900, svs->me->nick);
 			u->flags |= UF_KLINESENT;
 		}
 	}

@@ -96,7 +96,7 @@ static void akillchan_check_join(hook_channel_joinpart_t *hdata)
 					cu->user->user, cu->user->host,
 					cu->chan->name);
 
-			k = kline_add(cu->user->user, khost, reason, 86400, "*");
+			k = kline_add(cu->user->user, khost, reason, 86400, svs->me->nick);
 			cu->user->flags |= UF_KLINESENT;
 		}
 	}

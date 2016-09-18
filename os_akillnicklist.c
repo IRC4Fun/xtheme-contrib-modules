@@ -143,7 +143,7 @@ aknl_nickhook(hook_user_nick_t *data)
 
 	if (! (u->flags & UF_KLINESENT)) {
 		slog(LG_INFO, "AKNL: akilling \2%s\2!%s@%s [%s] due to appearing to be a possible spambot", u->nick, u->user, u->host, u->gecos);
-		k = kline_add(u->user, u->host, "Possible spambot", 86400, "*");
+		k = kline_add(u->user, u->host, "Possible spambot", 86400, svs->me->nick);
 		u->flags |= UF_KLINESENT;
 	}
 }
