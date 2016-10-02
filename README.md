@@ -26,13 +26,6 @@ a pull request on GitHub.
 
 ### Incomplete list of modules
 
-#### adminserv
-
-A service for Xtheme offering "psuedo-oper" services.  Introduces 
-user, channel and network management commands to non-opers with 
-corresponding privs.  Also provides WHOIS and WHOWAS commands.
-(WHOWAS currently only compatible with Charybdis ircd at this time.)
-
 #### cs_babbler.c
 
 Repeats what others users in a channel say back to a specific
