@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2005 William Pitcock, et al.
+ * Copyright (c) 2016 Austin Ellis <siniStar@IRC4Fun.net>.
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService FREGISTER function.
@@ -13,7 +14,7 @@ DECLARE_MODULE_V1
 (
 	"contrib/cs_fregister", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	"Xtheme Development Group <http://www.Xtheme.org>"
 );
 
 static void cs_cmd_fregister(sourceinfo_t *si, int parc, char *parv[]);
@@ -33,10 +34,12 @@ void _moddeinit(module_unload_intent_t intent)
 
 static void cs_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 {
+	myentity_t *mt;
 	channel_t *c;
 	chanuser_t *cu;
 	mychan_t *mc;
 	char *name = parv[0];
+	char *newfounder = parv[1];
 	char str[21];
 	hook_channel_register_check_t hdatac;
 	hook_channel_req_t hdata;
@@ -52,14 +55,14 @@ static void cs_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FREGISTER");
-		command_fail(si, fault_needmoreparams, _("To forcibly register a channel: FREGISTER <#channel>"));
+		command_fail(si, fault_needmoreparams, _("To forcibly register a channel: FREGISTER <#channel> [founder]"));
 		return;
 	}
 
 	if (*name != '#')
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "FREGISTER");
-		command_fail(si, fault_badparams, _("Syntax: FREGISTER <#channel>"));
+		command_fail(si, fault_badparams, _("Syntax: FREGISTER <#channel> [founder]"));
 		return;
 	}
 
@@ -93,61 +96,113 @@ static void cs_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	hdatac.si = si;
-	hdatac.name = name;
-	hdatac.chan = c;
-	hdatac.approved = 0;
-	hook_call_channel_can_register(&hdatac);
-	if (hdatac.approved != 0)
-		return;
+	if (newfounder != NULL)
+		{
 
-	logcommand(si, CMDLOG_REGISTER | CMDLOG_ADMIN, "FREGISTER: \2%s\2", name);
+		if (!(mt = myentity_find_ext(newfounder)))
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), newfounder);
+			return;
+		}
 
-	mc = mychan_add(name);
-	mc->registered = CURRTIME;
-	mc->used = CURRTIME;
-	mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
-	if (c->limit == 0)
-		mc->mlock_off |= CMODE_LIMIT;
-	if (c->key == NULL)
-		mc->mlock_off |= CMODE_KEY;
-	mc->flags |= config_options.defcflags;
+		hdatac.si = si;
+		hdatac.name = name;
+		hdatac.chan = c;
+		hdatac.approved = 0;
+		hook_call_channel_can_register(&hdatac);
+		if (hdatac.approved != 0)
+			return;
+
+		logcommand(si, CMDLOG_REGISTER | CMDLOG_ADMIN, "FREGISTER: \2%s\2 to \2%s\2", name, newfounder);
+
+		mc = mychan_add(name);
+		mc->registered = CURRTIME;
+		mc->used = CURRTIME;
+		mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
+		if (c->limit == 0)
+			mc->mlock_off |= CMODE_LIMIT;
+		if (c->key == NULL)
+			mc->mlock_off |= CMODE_KEY;
+		mc->flags |= config_options.defcflags;
+
+		chanacs_add(mc, mt, custom_founder_check(), CURRTIME, entity(si->smu));
+
+		if (c->ts > 0)
+		{
+			snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
+			metadata_add(mc, "private:channelts", str);
+		}
+
+		if (chansvs.deftemplates != NULL && *chansvs.deftemplates != '\0')
+			metadata_add(mc, "private:templates",
+					chansvs.deftemplates);
+
+		command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, newfounder);
+
+		hdata.si = si;
+		hdata.mc = mc;
+		hook_call_channel_register(&hdata);
+
+	}
+	else
+	{
+
+		hdatac.si = si;
+		hdatac.name = name;
+		hdatac.chan = c;
+		hdatac.approved = 0;
+		hook_call_channel_can_register(&hdatac);
+		if (hdatac.approved != 0)
+			return;
+
+		logcommand(si, CMDLOG_REGISTER | CMDLOG_ADMIN, "FREGISTER: \2%s\2", name);
+
+		mc = mychan_add(name);
+		mc->registered = CURRTIME;
+		mc->used = CURRTIME;
+		mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
+		if (c->limit == 0)
+			mc->mlock_off |= CMODE_LIMIT;
+		if (c->key == NULL)
+			mc->mlock_off |= CMODE_KEY;
+		mc->flags |= config_options.defcflags;
 
 	chanacs_add(mc, entity(si->smu), custom_founder_check(), CURRTIME, entity(si->smu));
 
-	if (c->ts > 0)
-	{
-		snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
-		metadata_add(mc, "private:channelts", str);
-	}
+		if (c->ts > 0)
+		{
+			snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
+			metadata_add(mc, "private:channelts", str);
+		}
 
-	if (chansvs.deftemplates != NULL && *chansvs.deftemplates != '\0')
-		metadata_add(mc, "private:templates",
-				chansvs.deftemplates);
+		if (chansvs.deftemplates != NULL && *chansvs.deftemplates != '\0')
+			metadata_add(mc, "private:templates",
+					chansvs.deftemplates);
 
-	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, entity(si->smu)->name);
+		command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, entity(si->smu)->name);
 
-	hdata.si = si;
-	hdata.mc = mc;
-	hook_call_channel_register(&hdata);
-	/* Allow the hook to override this. */
-	fl = chanacs_source_flags(mc, si);
-	cu = chanuser_find(mc->chan, si->su);
-	if (cu == NULL)
-		;
-	else if (ircd->uses_owner && fl & CA_USEOWNER && fl & CA_AUTOOP &&
-			!(cu->modes & CSTATUS_OWNER))
-	{
-		modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
-				ircd->owner_mchar[1], CLIENT_NAME(si->su));
-		cu->modes |= CSTATUS_OWNER;
-	}
-	else if (ircd->uses_protect && fl & CA_USEPROTECT && fl & CA_AUTOOP &&
-			!(cu->modes & CSTATUS_PROTECT))
-	{
-		modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
-				ircd->protect_mchar[1], CLIENT_NAME(si->su));
-		cu->modes |= CSTATUS_PROTECT;
+		hdata.si = si;
+		hdata.mc = mc;
+		hook_call_channel_register(&hdata);
+		/* Allow the hook to override this. */
+		fl = chanacs_source_flags(mc, si);
+		cu = chanuser_find(mc->chan, si->su);
+		if (cu == NULL)
+			;
+		else if (ircd->uses_owner && fl & CA_USEOWNER && fl & CA_AUTOOP &&
+				!(cu->modes & CSTATUS_OWNER))
+		{
+			modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
+					ircd->owner_mchar[1], CLIENT_NAME(si->su));
+			cu->modes |= CSTATUS_OWNER;
+		}
+		else if (ircd->uses_protect && fl & CA_USEPROTECT && fl & CA_AUTOOP &&
+				!(cu->modes & CSTATUS_PROTECT))
+		{
+			modestack_mode_param(si->service->nick, mc->chan, MTYPE_ADD,
+					ircd->protect_mchar[1], CLIENT_NAME(si->su));
+			cu->modes |= CSTATUS_PROTECT;
+		}
 	}
 }
 
