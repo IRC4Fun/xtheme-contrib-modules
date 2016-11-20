@@ -7,7 +7,7 @@ DECLARE_MODULE_V1
 (
 	"contrib/backtrace", false, _modinit, _moddeinit,
 	PACKAGE_STRING,
-	"Atheme Development Group <http://www.atheme.org>"
+	"Xtheme Development Group <http://www.xtheme.org>"
 );
 
 static void __segv_hdl(int whocares)
@@ -23,7 +23,7 @@ static void __segv_hdl(int whocares)
 	slog(LG_INFO, "%zu stack frames, flags %s", sz, get_conf_opts());
 	for (i = 0; i < sz; i++)
 		slog(LG_INFO, "#%zu --> %p (%s)", i, array[i], strings[i]);
-	slog(LG_INFO, "Report to http://jira.atheme.org/");
+	slog(LG_INFO, "Report to https://github.com/XthemeOrg/Xtheme/issues/");
 	slog(LG_INFO, "--------------------------------------------");
 }
 
