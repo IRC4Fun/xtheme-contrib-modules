@@ -106,7 +106,7 @@ aknl_nickhook(hook_user_nick_t *data)
 	bool doit = false;
 	const char *username;
 	kline_t *k;
-	
+
 	service_t *svs;
 	svs = service_find("operserv");
 
@@ -145,8 +145,8 @@ aknl_nickhook(hook_user_nick_t *data)
 		return;
 
 	if (! (u->flags & UF_KLINESENT)) {
-		slog(LG_INFO, "AKNL: akilling \2%s\2!%s@%s [%s] due to appearing to be a possible spambot", u->nick, u->user, u->host, u->gecos);
-		k = kline_add(u->user, u->host, "Possible spambot", 86400, svs->me->nick);
+		slog(LG_INFO, "AKNL: akilling \2%s\2!*@%s (%s) [%s] due to matching AUTO AKILL criteria.", u->nick, u->host, u->ip, u->gecos);
+		k = kline_add("*", u->ip, "AUTO (Matches AUTO AKILL)", 86400, svs->me->nick);
 		u->flags |= UF_KLINESENT;
 	}
 }
