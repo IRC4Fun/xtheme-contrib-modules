@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2005-2007 Atheme Development Group
- * Copyright (c) 2014-2015 Xtheme Development Group
+ * Copyright (c) 2014-2017 Xtheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * AutoAKILL channels. (formerly os_klinechan but using 
@@ -92,11 +92,11 @@ static void akillchan_check_join(hook_channel_joinpart_t *hdata)
 			snprintf(reason, sizeof reason, "Joined AKILL channel %s",
 					cu->chan->name);
 			slog(LG_INFO, "akillchan_check_join(): AKILLing \2*@%s\2 (user \2%s!%s@%s\2 joined \2%s\2)",
-					khost, cu->user->nick,
-					cu->user->user, cu->user->host,
+					cu->user->ip, cu->user->nick,
+					cu->user->user, cu->user->ip,
 					cu->chan->name);
 
-			k = kline_add(cu->user->user, khost, reason, 86400, svs->me->nick);
+			k = kline_add("*", cu->user->ip, reason, 86400, svs->me->nick);
 			cu->user->flags |= UF_KLINESENT;
 		}
 	}
@@ -164,7 +164,7 @@ static void os_cmd_akillchan(sourceinfo_t *si, int parc, char *parv[])
 
 		if (metadata_find(mc, "private:klinechan:closer"))
 		{
-			command_fail(si, fault_nochange, "\2%s\2 is already on autoakill.", target);
+			command_fail(si, fault_nochange, "\2%s\2 is already on auto-akill.", target);
 			return;
 		}
 
