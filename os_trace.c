@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2014-2017 Xtheme Development Group <Xtheme.org> 
  * Copyright (c) 2010 William Pitcock <nenolod@atheme.org>
  * Rights to this code are as documented in doc/LICENSE.
  *
@@ -12,7 +13,7 @@ DECLARE_MODULE_V1
 (
 	"contrib/os_trace", false, _modinit, _moddeinit,
 	"Copyright (c) 2010 William Pitcock <nenolod@atheme.org>",
-	"Atheme Development Group <http://www.atheme.org>"
+	"Xtheme Development Group <http://www.Xtheme.org>"
 );
 
 static char *reason_extract(char **args);
@@ -608,7 +609,7 @@ static trace_action_t *trace_akill_prepare(sourceinfo_t *si, char **args)
 {
 	trace_action_akill_t *a;
 	char *s, *reason;
-	long duration = config_options.kline_time;
+	long duration = config_options.akill_time;
 	char token;
 
 	return_val_if_fail(si != NULL, NULL);

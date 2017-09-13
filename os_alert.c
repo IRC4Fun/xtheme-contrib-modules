@@ -724,7 +724,7 @@ static void alert_notice_action_exec(user_t *u, alert_action_t *a)
 
 	index = 1 + mowgli_node_index(a->alert->owned_node, owned_alerts_list);
 
-	myuser_notice(operserv->nick, (myuser_t *)ent, "\2Alert (%d):\2  %s!%s@%s %s {%s}", index, u->nick, u->user, u->host, u->gecos, u->server->name);
+	myuser_notice(operserv->nick, (myuser_t *)ent, "\2Alert (%zu):\2  %s!%s@%s %s {%s}", index, u->nick, u->user, u->host, u->gecos, u->server->name);
 }
 
 static void alert_notice_action_cleanup(alert_action_t *a)
@@ -769,7 +769,7 @@ static void alert_noticeops_action_exec(user_t *u, alert_action_t *a)
 		soper_t *soper = soper_node->data;
 		myuser_t *myuser = soper->myuser;
 
-		myuser_notice(operserv->nick, myuser, "\2Alert (%s/%d):\2 %s!%s@%s %S {%s}", owner->name, index, u->nick, u->user, u->host, u->gecos, u->server->name);
+		myuser_notice(operserv->nick, myuser, "\2Alert (%s/%zu):\2 %s!%s@%s %s {%s}", owner->name, index, u->nick, u->user, u->host, u->gecos, u->server->name);
 	}
 
 }
