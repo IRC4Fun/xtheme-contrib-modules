@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014-2017 Xtheme Development Group
  * Copyright (c) 2007 Jilles Tjoelker
  * Copyright (c) 2008 Robin Burchell
+ * Copyright (c) 2014-2017 Xtheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Services-side autojoin using SVSJOIN
@@ -54,10 +54,6 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 	else if (!strcasecmp(parv[0], "ADD"))
 	{
 		if (!parv[1])
-			return ns_cmd_ajoin_syntaxerr(si);
-
-		// Make sure it is a valid #channel     -siniStar
-		if (*chan != '#')
 			return ns_cmd_ajoin_syntaxerr(si);
 
 		if ((md = metadata_find(si->smu, "private:autojoin")))
